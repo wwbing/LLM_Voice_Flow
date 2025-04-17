@@ -213,11 +213,11 @@ for a list of pre-trained models to download.
       if (!text.empty()) {
 
         auto response = client.request(text);
-        std::cout << "Voice received: " << response << std::endl;
+        std::cout << "[llm -> voice] received: " << response << std::endl;
 
         wait = true;
         auto block_response = block_client.request("block");
-        std::cout << "Block Voice received: " << block_response << std::endl;
+        std::cout << "[tts -> voice] received: " << block_response << std::endl;
         wait = false;
 
         ++segment_index;
