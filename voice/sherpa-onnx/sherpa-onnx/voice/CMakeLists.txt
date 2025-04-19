@@ -1,5 +1,6 @@
 include_directories(${PROJECT_SOURCE_DIR} 
-/home/luckfox/work/AI面试助手/zmq-comm-kit/include
+
+
 )
 
 
@@ -9,7 +10,8 @@ include_directories(${PROJECT_SOURCE_DIR}
   )
 
 
-target_link_libraries(sherpa-onnx-microphone-test1 portaudio_static sherpa-onnx-core /home/luckfox/work/AI面试助手/zmq-comm-kit/build/libzmq_component.a zmq)
+target_link_libraries(sherpa-onnx-microphone-test1 portaudio_static sherpa-onnx-core  zmq   /usr/local/lib/libzmq_component.so  ${ZeroMQ_LIBRARIES}    pthread  
+)
 
 
 target_link_libraries(sherpa-onnx-microphone-test1 "-Wl,-rpath,${SHERPA_ONNX_RPATH_ORIGIN}/../lib")

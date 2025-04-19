@@ -12,7 +12,7 @@ include_directories(
     ${ALSA_INCLUDE_DIRS}
 )
 
-include_directories(/home/luckfox/work/AI面试助手/zmq-comm-kit/include)
+#include_directories(/home/sorbai/work/LLM_Voice_Flow/zmq-comm-kit/include)
 
 file(GLOB SOURCES tts_server/src/*.cpp)
 
@@ -96,5 +96,5 @@ target_include_directories(tts_server PUBLIC ./eigen-3.4.0
                                               ./src/header  
                                               ./tts_server/include)
 
-target_link_libraries(tts_server  /home/luckfox/work/AI面试助手/zmq-comm-kit/build/libzmq_component.a zmq portaudio asound)
+target_link_libraries(tts_server    /usr/local/lib/libzmq_component.so  zmq portaudio asound)
 

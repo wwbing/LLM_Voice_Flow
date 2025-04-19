@@ -9,7 +9,7 @@ include_directories(
     include
 )
 
-add_library(zmq_component
+add_library(zmq_component SHARED
     src/ZmqInterface.cpp
     src/ZmqServer.cpp
     src/ZmqClient.cpp
