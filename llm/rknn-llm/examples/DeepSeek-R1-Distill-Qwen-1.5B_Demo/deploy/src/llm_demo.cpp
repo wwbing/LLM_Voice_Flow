@@ -51,67 +51,105 @@ bool is_valid_utf8_continuation(uint8_t c)
     return (c & 0xC0) == 0x80; 
 }
 
-std::string extract_after_think(const std::string &input)
+// std::string extract_after_think(const std::string &input)
+// {
+//     const std::string start_tag = "<think>";
+//     const std::string end_tag = "</think>";
+
+//     size_t start_pos = input.find(start_tag);
+//     size_t end_pos = input.find(end_tag);
+
+//     std::string result;
+
+//     if (start_pos != std::string::npos && end_pos != std::string::npos && end_pos > start_pos)
+//     {
+//         result = input.substr(start_pos + start_tag.length(), end_pos - start_pos - start_tag.length());
+//     } else if (end_pos != std::string::npos) {
+//         result = input.substr(end_pos + end_tag.length());
+//     } else {
+//         result = input;
+//     }
+
+//     // 定义要过滤的字符
+//     const std::string punct = " \t\n\r*#@$%^&，。：、；！？【】（）“”‘’";
+
+//     // 安全过滤：保护 UTF-8 多字节字符
+//     std::string filtered;
+//     for (size_t i = 0; i < result.size();)
+//     {
+//         uint8_t c = result[i];
+//         if (punct.find(c) != std::string::npos)
+//         {
+//             i++;
+//         }
+//         else
+//         {
+//             size_t char_len = 1;
+//             if ((c & 0xE0) == 0xC0)
+//                 char_len = 2;
+//             else if ((c & 0xF0) == 0xE0)
+//                 char_len = 3;
+//             else if ((c & 0xF8) == 0xF0)
+//                 char_len = 4;
+
+//             bool is_valid = true;
+//             for (size_t j = 1; j < char_len; ++j)
+//             {
+//                 if (i + j >= result.size() || !is_valid_utf8_continuation(result[i + j]))
+//                 {
+//                     is_valid = false;
+//                     break;
+//                 }
+//             }
+
+//             if (is_valid)
+//             {
+//                 filtered.append(result.substr(i, char_len));
+//                 i += char_len;
+//             }
+//             else
+//             {
+//                 i++;
+//             }
+//         }
+//     }
+
+//     return filtered;
+// }
+
+std::wstring extract_after_think(const std::wstring &input)
 {
-    const std::string start_tag = "<think>";
-    const std::string end_tag = "</think>";
+    const std::wstring start_tag = L"<think>";
+    const std::wstring end_tag = L"</think>";
 
     size_t start_pos = input.find(start_tag);
     size_t end_pos = input.find(end_tag);
 
-    std::string result;
+    std::wstring result;
 
-    if (start_pos != std::string::npos && end_pos != std::string::npos && end_pos > start_pos)
+    if (start_pos != std::wstring::npos && end_pos != std::wstring::npos && end_pos > start_pos)
     {
         result = input.substr(start_pos + start_tag.length(), end_pos - start_pos - start_tag.length());
-    } else if (end_pos != std::string::npos) {
+    }
+    else if (end_pos != std::wstring::npos)
+    {
         result = input.substr(end_pos + end_tag.length());
-    } else {
+    }
+    else
+    {
         result = input;
     }
 
-    // 定义要过滤的字符
-    const std::string punct = " \t\n\r*#@$%^&，。：、；！？【】（）“”‘’";
+    // 定义要过滤的字符（宽字符版本）
+    const std::wstring punct = L" \t\n\r*#@$%^&，。：、；！？【】（）“”‘’";
 
-    // 安全过滤：保护 UTF-8 多字节字符
-    std::string filtered;
-    for (size_t i = 0; i < result.size();)
+    // 过滤处理
+    std::wstring filtered;
+    for (wchar_t c : result)
     {
-        uint8_t c = result[i];
-        if (punct.find(c) != std::string::npos)
+        if (punct.find(c) == std::wstring::npos)
         {
-            i++;
-        }
-        else
-        {
-            size_t char_len = 1;
-            if ((c & 0xE0) == 0xC0)
-                char_len = 2; 
-            else if ((c & 0xF0) == 0xE0)
-                char_len = 3; 
-            else if ((c & 0xF8) == 0xF0)
-                char_len = 4;
-
-        
-            bool is_valid = true;
-            for (size_t j = 1; j < char_len; ++j)
-            {
-                if (i + j >= result.size() || !is_valid_utf8_continuation(result[i + j]))
-                {
-                    is_valid = false;
-                    break;
-                }
-            }
-
-            if (is_valid)
-            {
-                filtered.append(result.substr(i, char_len));
-                i += char_len;
-            }
-            else
-            {
-                i++; 
-            }
+            filtered += c;
         }
     }
 
@@ -144,7 +182,8 @@ void exit_handler(int signal)
 }
 
 void send_response(const std::wstring& text) {
-    std::string response_str = extract_after_think(wstring_to_utf8(text));
+    // std::string response_str = extract_after_think(wstring_to_utf8(text));
+    std::string response_str = wstring_to_utf8(extract_after_think(text));
     auto response = client.request(response_str);
     std::cout << "[tts -> llm] received : " << response << std::endl;
 }
@@ -156,7 +195,7 @@ void callback(RKLLMResult *result, void *userdata, LLMCallState state)
     {
         if (!buffer_.empty())
         {
-            std::string response_str = extract_after_think(wstring_to_utf8(buffer_)) + " END";
+            std::string response_str = wstring_to_utf8(extract_after_think(buffer_)) + " END";
             auto response = client.request(response_str);
             std::cout << "[tts -> llm] received: " << response << std::endl;
             buffer_.clear();
