@@ -4,7 +4,7 @@ project(TTSServer)
 
 #set(CMAKE_CXX_FLAGS " -O3 -w -std=c++11 ")
 #set(CMAKE_C_FLAGS " -O3 -w -std=c++11 ")
-
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_FLAGS " -O3 -fopenmp -std=c++17 ")
 set(CMAKE_C_FLAGS " -O3 -fopenmp -std=c++17 ")
 include_directories(

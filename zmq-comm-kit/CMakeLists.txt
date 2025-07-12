@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 project(zmq_component VERSION 1.0.0 LANGUAGES CXX)
-
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 find_package(PkgConfig REQUIRED)
 pkg_search_module(ZMQ REQUIRED libzmq)
 find_package(Threads REQUIRED)

@@ -1,4 +1,5 @@
 #include "pinyinmap.h"
+#include <cstdint>
 
 map<string, int32_t> initPhoneIDMap()
 {

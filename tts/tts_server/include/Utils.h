@@ -3,6 +3,7 @@
 
 #include <string>
 #include <pthread.h>
+#include <cstdint>
 #include <vector>
 
 namespace utils

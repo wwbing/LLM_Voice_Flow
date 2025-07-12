@@ -1,4 +1,5 @@
 #include "MessageQueue.h"
+#include <string>
 
 void DoubleMessageQueue::push_text(const std::string &msg)
 {
@@ -12,11 +13,9 @@ void DoubleMessageQueue::push_text(const std::string &msg)
 std::string DoubleMessageQueue::pop_text()
 {
     std::unique_lock<std::mutex> lock(text_mutex_);
-    text_cond_.wait(lock, [this]
-                    { return !text_queue_.empty() || stop_; });
+    text_cond_.wait(lock, [this] { return !text_queue_.empty() || stop_; });
 
-    if (stop_)
-        return "";
+    if (stop_) return "";
 
     std::string msg = std::move(text_queue_.front());
     text_queue_.pop();
@@ -36,11 +35,9 @@ void DoubleMessageQueue::push_audio(std::unique_ptr<int16_t[]> data, size_t leng
 AudioMessage DoubleMessageQueue::pop_audio()
 {
     std::unique_lock<std::mutex> lock(audio_mutex_);
-    audio_cond_.wait(lock, [this]
-                     { return !audio_queue_.empty() || stop_; });
+    audio_cond_.wait(lock, [this] { return !audio_queue_.empty() || stop_; });
 
-    if (stop_)
-        return {nullptr, 0, true};
+    if (stop_) return {nullptr, 0, true};
 
     AudioMessage msg = std::move(audio_queue_.front());
     audio_queue_.pop();

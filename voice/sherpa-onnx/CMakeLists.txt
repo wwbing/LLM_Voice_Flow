@@ -4,8 +4,12 @@ endif()
 
 cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 
-set(CMAKE_OSX_DEPLOYMENT_TARGET "10.14" CACHE STRING "Minimum OS X deployment version. Used only for macOS")
+# 设置FETCHCONTENT_QUIET为OFF以显示下载进度
+set(FETCHCONTENT_QUIET OFF)
 
+cmake_policy(SET CMP0169 OLD)
+set(CMAKE_OSX_DEPLOYMENT_TARGET "10.14" CACHE STRING "Minimum OS X deployment version. Used only for macOS")
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_POLICY_DEFAULT_CMP0063 NEW)
 set(CMAKE_POLICY_DEFAULT_CMP0069 NEW)
 
